@@ -17,83 +17,79 @@ const addTodo = async () => {
   }
 };
 
-const todoCount = async ()=>{
-    try {
-        const count = await Todo.count();
-        console.log(`Number of todos in Table : ${count}`);
-    } catch (error) {
-        console.log(error);
-    }
-}
+const todoCount = async () => {
+  try {
+    const count = await Todo.count();
+    console.log(`Number of todos in Table : ${count}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-const allTodos = async ()=>{
-    try {
-        const todos = await Todo.findAll({
-            order : [
-                ['id','DESC']
-            ]
-        })
+const allTodos = async () => {
+  try {
+    const todos = await Todo.findAll({
+      order: [["id", "DESC"]],
+    });
 
-        var str = (await todos).map(todo => todo.displayTodo()).join("\n");
-        console.log(str);
+    var str = (await todos).map((todo) => todo.displayTodo()).join("\n");
+    console.log(str);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-    } catch (error) {
-        console.log(error);
-    }
-}
+const singleTodo = async () => {
+  try {
+    const todo = await Todo.findOne({
+      where: {
+        completed: false,
+      },
+      order: [["id", "DESC"]],
+    });
 
-const singleTodo = async ()=>{
-    try {
-        const todo = await Todo.findOne({
-            where :{
-                completed : false
-            },
-            order : [
-                ['id','DESC']
-            ]
-        })
+    console.log(todo.displayTodo());
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-        console.log(todo.displayTodo());
+const updateTodo = async (id) => {
+  try {
+    const todo = await Todo.update(
+      { completed: true },
+      {
+        where: {
+          id: id,
+        },
+      }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-    } catch (error) {
-        console.log(error);
-    }
-}
+const deleteTodo = async (id) => {
+  try {
+    const afftectedRows = await Todo.destroy({
+      where: {
+        id: id,
+      },
+    });
 
-const updateTodo = async (id)=>{
-    try {
-        const todo = await Todo.update({completed : true},{
-            where :{
-                id : id
-            }
-        })
-    }  catch (error) {
-        console.log(error);
-    }
-}
-
-const deleteTodo = async(id)=>{
-    try {
-        const afftectedRows = await Todo.destroy({
-            where :{
-                id : id
-            }
-        })
-
-        console.log(`Number of rows deleted : ${afftectedRows}`);
-
-    }  catch (error) {
-        console.log(error);
-    }
-}
+    console.log(`Number of rows deleted : ${afftectedRows}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 (async () => {
-    // await addTodo();
-    // await todoCount();
-    // await allTodos();
-    // await singleTodo()
-    // await updateTodo(2);
-    await allTodos();
-    await deleteTodo(2);
-    await allTodos();
+  // await addTodo();
+  // await todoCount();
+  // await allTodos();
+  // await singleTodo()
+  // await updateTodo(2);
+  await allTodos();
+  await deleteTodo(2);
+  await allTodos();
 })();

@@ -17,7 +17,6 @@
 //     console.error("Unable to connect to the database:", error);
 //   });
 
-
 const Sequelize = require("sequelize");
 
 const database = "todo_db";
@@ -26,14 +25,14 @@ const password = "Drvl@123";
 const sequelize = new Sequelize(database, username, password, {
   host: "localhost",
   dialect: "postgres",
-  logging : false,
+  logging: false,
 });
 
 const connect = async () => {
   return sequelize.authenticate();
-}
+};
 
 module.exports = {
   connect,
-  sequelize
-}
+  sequelize,
+};

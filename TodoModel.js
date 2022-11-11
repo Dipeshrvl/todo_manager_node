@@ -2,13 +2,14 @@ const { DataTypes, Model } = require("sequelize");
 const { sequelize } = require("./connectDB.js");
 
 class Todo extends Model {
-
-  static async addTask(obj){
+  static async addTask(obj) {
     return await Todo.create(obj);
   }
 
-  displayTodo(){
-    return `${this.completed ? '[x]' : '[ ]'} ${this.id} ${this.title} ${this.dueDate}`
+  displayTodo() {
+    return `${this.completed ? "[x]" : "[ ]"} ${this.id} ${this.title} ${
+      this.dueDate
+    }`;
   }
 }
 Todo.init(
