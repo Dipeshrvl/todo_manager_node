@@ -1,5 +1,5 @@
 "use strict";
-const { Model } = require("sequelize");
+const { Model, Op } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
     /**
@@ -10,35 +10,77 @@ module.exports = (sequelize, DataTypes) => {
     static async addTask(params) {
       return await Todo.create(params);
     }
+
     static async showList() {
       console.log("My Todo list \n");
 
       console.log("Overdue");
-      // FILL IN HERE
+      console.log(
+        (await Todo.overdue())
+          .map((todo) => todo.displayableString())
+          .join("\n")
+      );
       console.log("\n");
 
       console.log("Due Today");
-      // FILL IN HERE
+      console.log(
+        (await Todo.dueToday())
+          .map((todo) => todo.displayableString())
+          .join("\n")
+      );
       console.log("\n");
 
       console.log("Due Later");
-      // FILL IN HERE
+      console.log(
+        (await Todo.dueLater())
+          .map((todo) => todo.displayableString())
+          .join("\n")
+      );
     }
 
     static async overdue() {
       // FILL IN HERE TO RETURN OVERDUE ITEMS
+      return await Todo.findAll({
+        where: {
+          dueDate: {
+            [Op.lt]: new Date().toLocaleDateString("en-CA"),
+          },
+        },
+      });
     }
 
     static async dueToday() {
-      // FILL IN HERE TO RETURN ITEMS DUE tODAY
+      const todo = await Todo.findAll({
+        where: {
+          dueDate: {
+            [Op.eq]: new Date().toLocaleDateString("en-CA"),
+          },
+        },
+      });
+      // console.log(todo);
+      return todo;
     }
 
     static async dueLater() {
-      // FILL IN HERE TO RETURN ITEMS DUE LATER
+      return await Todo.findAll({
+        where: {
+          dueDate: {
+            [Op.gt]: new Date().toLocaleDateString("en-CA"),
+          },
+        },
+      });
     }
 
     static async markAsComplete(id) {
       // FILL IN HERE TO MARK AN ITEM AS COMPLETE
+      await Todo.update(
+        { completed: true },
+        {
+          where: {
+            id: id,
+          },
+        }
+      );
     }
 
     displayableString() {

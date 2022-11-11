@@ -90,6 +90,6 @@ const deleteTodo = async (id) => {
   // await singleTodo()
   // await updateTodo(2);
   await allTodos();
-  await deleteTodo(2);
+  // await deleteTodo(2);
   await allTodos();
 })();
